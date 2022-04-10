@@ -1,6 +1,36 @@
+import { useEffect, useState } from 'react';
 import './styles.css';
 
+const opportunityData = [
+    { name: "RPA" },
+    { name: "Produto Digital" },
+    { name: "Analytics" },
+    { name: "BPM" }
+];
+
 function AddLeadForm() {
+
+    const [opportunities, setOpportunities] = useState([]);
+
+    useEffect(() => {
+        setOpportunities(opportunityData);
+    }, []);
+
+    const handleChange = (e) => {
+        const { name, checked } = e.target;
+
+        if(name === "all-selected") {
+            let tempOpp = opportunities.map(opp => {return {...opp, isChecked : checked}})
+
+            setOpportunities(tempOpp);
+        }
+        else {
+            let tempOpp = opportunities.map(opp => opp.name === name ? { ...opp, isChecked: checked } : opp);
+
+            setOpportunities(tempOpp);
+        }
+    }
+
     return (
         <div className="add-lead-container">
             <form id="lead-form">
@@ -21,44 +51,42 @@ function AddLeadForm() {
                     </div>
                 </div>
 
-                <div class="leadtest">
-                    <div className="lead-opportunity">
-                        <caption>Oportunidades *</caption>
+                <div>
+                    <div>
                         <table id="opportunity-table">
+                        <caption>Oportunidades *</caption>
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="checkbox" />
+                                        <input
+                                            type="checkbox"
+                                            name="all-selected"
+                                            checked={opportunities.filter(opp => opp?.isChecked !== true).length < 1}
+                                            onChange={handleChange}
+                                        />
                                     </th>
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td>RPA</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td>Produto Digital</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td>Analytics</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td>BPM</td>
-                                </tr>
+
+                                {opportunities.map((opp, key) => (
+                                    <tr key={key}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                name={opp.name}
+                                                checked={opp?.isChecked || false}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <label htmlFor={opp.name}>{opp.name}</label>
+                                        </td>
+                                    </tr>
+                                ))}
+
                             </tbody>
                         </table>
                     </div>
@@ -67,7 +95,6 @@ function AddLeadForm() {
                 </div>
             </form>
         </div>
-
     );
 }
 
