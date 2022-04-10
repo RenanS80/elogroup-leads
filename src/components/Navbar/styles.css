@@ -1,0 +1,25 @@
+header {
+    height: 80px;
+
+    background: var(--black-light);
+}
+
+header > .container {
+    max-width: 1440px;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    margin: 0 auto;
+    padding: 0px 15px;
+}
+
+.header-icon {
+    transition: opacity .4s ease;
+}
+
+.header-icon:hover {
+    opacity: 0.8;
+}
