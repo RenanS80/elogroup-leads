@@ -1,0 +1,22 @@
+.container-table {
+    overflow-x: auto;
+}
+
+#leads-table {
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: var(--gray);
+}
+
+#leads-table td,
+#leads-table th {
+    border: 1px solid var(--black-light);
+    padding: 28px;
+}
+
+#leads-table tbody tr:nth-child(odd) {
+    background-color: var(--gray-light);
+}
+

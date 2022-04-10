@@ -1,9 +1,10 @@
 import './App.css';
-import Home from './pages/Home';
+
+import LeadsPanel from './pages/LeadsPanel';
 
 function App() {
   return (
-    <Home />
+    <LeadsPanel />
   );
 }
 
