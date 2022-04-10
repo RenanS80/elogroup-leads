@@ -1,0 +1,19 @@
+main {
+    height: calc(100vh - 80px);
+}
+
+main > .container {
+    max-width: 1440px;
+    height: 100%;
+    
+    margin: 0 auto;
+    padding: 0px 15px;
+}
+
+.leads-title {
+    margin-top: 80px;
+}
+
+.leads-title h1 {
+    text-align: center;
+}

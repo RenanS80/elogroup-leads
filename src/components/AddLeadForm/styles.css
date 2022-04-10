@@ -1,0 +1,138 @@
+.add-lead-container {
+    margin-top: 50px;
+    background: var(--gray-white);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 70px 0px;
+}
+
+/* Form */
+#lead-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+#lead-form .lead-info {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+#lead-form .lead-name,
+#lead-form .lead-tel,
+#lead-form .lead-email {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+#lead-form label {
+    margin-bottom: 10px;
+}
+
+#lead-form .input-field {
+    height: 35px;
+    padding-left: 15px;
+    width: 300px;
+    border-radius: 6px;
+    border: 1px solid var(--gray);
+}
+
+#lead-form .input-field:active,
+#lead-form .input-field:focus {
+    outline-color: var(--black-light);
+}
+
+#lead-form .submit-lead-btn {
+    padding: 12px 40px;
+
+    margin: 50px 0px;
+
+    background: var(--blue);
+    box-shadow: 0px 5px 5px rgba(23, 23, 23, 0.1);
+
+    border-radius: 6px;
+    border: none;
+
+    color: var(--white);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 17px;
+
+    cursor: pointer;
+
+    transition: opacity .4s ease;
+}
+
+#lead-form .submit-lead-btn:hover {
+    opacity: 0.9;
+}
+
+
+/* Table */
+caption {
+    width: 350px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+#opportunity-table {
+    border-collapse: collapse;
+    width: 350px;
+}
+
+thead {
+    background-color: var(--gray);
+}
+
+#opportunity-table td,
+#opportunity-table th {
+    border: 1px solid var(--black-light);
+    padding: 12px;
+}
+
+#opportunity-table tbody tr:nth-child(even) {
+    background-color: var(--white);
+}
+
+#opportunity-table tr th:first-child,
+#opportunity-table tr td:first-child {
+    transform: scale(1.1);
+} 
+
+#opportunity-table tr td:first-child{
+    text-align: center;
+}
+
+
+/* Media Queries */
+@media (max-width: 740px) {
+    #lead-form {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 415px) {   
+    #lead-form .input-field,
+    #opportunity-table,
+    caption {
+        width: 300px;
+        margin: 0 auto;
+    }
+
+    caption {
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 376px) {
+    #lead-form .input-field,
+    #opportunity-table,
+    caption {
+        width: 260px;
+    }
+}

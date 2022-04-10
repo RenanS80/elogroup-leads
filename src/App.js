@@ -1,10 +1,9 @@
 import './App.css';
-
-import LeadsPanel from './pages/LeadsPanel';
+import AddLead from './pages/AddLead';
 
 function App() {
   return (
-    <LeadsPanel />
+    <AddLead />
   );
 }
 
