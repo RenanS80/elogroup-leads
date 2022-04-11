@@ -1,6 +1,6 @@
 .form-box {
     width: 380px;
-    height: 480px;
+    height: 585px;
 
     margin-top: 100px;
 
@@ -64,6 +64,18 @@
     margin-bottom: 10px;
 }
 
+#register-form .user-register-password label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.password-tip {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
 #register-form .submit-user-btn {
     width: 80%;
     height: 42px;
@@ -90,7 +102,13 @@
     opacity: 0.9;
 }
 
+#register-form .empty-text {
+    color: var(--red);
+    margin-top: 10px;
+}
 
+
+/* Media queries */
 @media (max-width: 360px) {
     .elogroup-logo img {
         width: 65%;

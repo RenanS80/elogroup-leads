@@ -32,7 +32,7 @@ function AddLeadForm() {
     }
 
     return (
-        <div className="add-lead-container">
+        <div className="add-lead-comp-container">
             <form id="lead-form">
                 <div className="lead-info">
                     <div className="lead-name">
