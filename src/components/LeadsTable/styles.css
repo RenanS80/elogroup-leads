@@ -14,8 +14,12 @@ thead {
 #leads-table th {
     border: 1px solid var(--black-light);
     padding: 28px;
+    text-align: center;
 }
 
+#leads-table td[draggable="true"] {
+    cursor: grab;
+}
 
 #leads-table tbody tr:nth-child(odd) {
     background-color: var(--gray-light);

@@ -9,6 +9,7 @@ import './styles.css';
 import 'tippy.js/dist/tippy.css';
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
+import LocalStorageManager from '../../utils/LocalStorageManager';
 
 
 function UserSignupForm() {
@@ -50,7 +51,7 @@ function UserSignupForm() {
             toast.success('Cadastro realizado com sucesso');
 
             // Salva os dados do usuário no LocalStorage e redireciona para a o painel de leads
-            localStorage.setItem("user", form.user);
+            LocalStorageManager.setUser(form.user);
             navigate("/leads");
         }
     }

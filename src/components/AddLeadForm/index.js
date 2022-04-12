@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ArrowLeft from '../../assets/img/arrow-left.svg';
@@ -69,11 +69,11 @@ function AddLeadForm() {
         setEmptyValueCheckbox(emptyValueCheckbox)
 
         // Verifica se o email é válido
-        let validEmail = form["email"].toLowerCase().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+        let validEmail = form["email"].toLowerCase().match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/);
         setValidEmail(validEmail);
 
         // Condição para salvar o lead
-        if (!emptyValues &&!emptyValueCheckbox && validEmail) {
+        if (!emptyValues && !emptyValueCheckbox && validEmail) {
             toast.success("Lead salvo com sucesso")
 
             // Salva os dados do lead no LocalStorage e redireciona para a o painel de leads
