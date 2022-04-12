@@ -1,6 +1,6 @@
 import './styles.css';
 
-function GetUser() {
+function ShowUser() {
     if (localStorage.getItem("user")) {
         return (
             <p>{`Usuário: ${localStorage.getItem("user")}`}</p>
@@ -10,4 +10,4 @@ function GetUser() {
     }
 }
 
-export default GetUser;
+export default ShowUser;

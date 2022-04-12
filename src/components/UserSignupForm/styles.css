@@ -102,7 +102,7 @@
     opacity: 0.9;
 }
 
-#register-form .empty-text {
+#register-form .error-message {
     color: var(--red);
     margin-top: 10px;
 }

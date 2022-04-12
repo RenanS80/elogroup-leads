@@ -1,14 +1,15 @@
+import Tippy from '@tippy.js/react'
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import Logo from '../../assets/img/elogroup-logo.svg';
 import TipIcon from '../../assets/img/tip.svg';
-
-import Tippy from '@tippy.js/react'
-
 
 import './styles.css';
 import 'tippy.js/dist/tippy.css';
 import "react-toastify/dist/ReactToastify.css";
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 function UserSignupForm() {
 
@@ -18,14 +19,17 @@ function UserSignupForm() {
         passwordConfirmation: ""
     });
 
+    
     const [emptyValue, setEmptyValue] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    const [confirmPassword, setConfirmPassword] = useState(false);
+    /* const [confirmPassword, setConfirmPassword] = useState(false); */
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         let newProp = form;
         setValidPassword(true);
-        setConfirmPassword(true);
+        /* setConfirmPassword(true); */
         newProp[e.target.name] = e.target.value;
 
         setForm({ ...newProp });
@@ -42,13 +46,11 @@ function UserSignupForm() {
         let validPassword = form["password"].match(/(?=^.{8,}$)((?=.*\d)(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)
         setValidPassword(validPassword);
 
-
-
         // Envia o formulário se atender as regras de validação
         if (!emptyValues && validPassword) {
-            toast.success('Login realizado com sucesso');
+            toast.success('Cadastro realizado com sucesso');
             localStorage.setItem("user", form.user);
-            window.location.assign("/leads");
+            navigate("/leads");
         }
     }
 
@@ -69,12 +71,12 @@ function UserSignupForm() {
                         onChange={(e) => handleChange(e)}
                     />
 
-                    {emptyValue && form["user"] === "" ? <p className="empty-text">O nome de usuário deve ser preenchido</p> : ""}
+                    {emptyValue && form["user"] === "" ? <p className="error-message">O nome de usuário deve ser preenchido</p> : ""}
                 </div>
 
                 <div className="user-register-password">
                     <label htmlFor="password">Password *
-                        <Tippy content="No mínimo 8 caracteres, pelo menos um caractere especial, um caractere numérico e um caractere alfanumérico">
+                        <Tippy content="No mínimo 8 caracteres, pelo menos um caractere especial, um caractere numérico, uma letra maiúscula e uma letra minúscula">
                             <img src={TipIcon} className="password-tip" alt="Password tip" />
                         </Tippy>
                     </label>
@@ -86,8 +88,8 @@ function UserSignupForm() {
                         onChange={(e) => handleChange(e)}
                     />
 
-                    {emptyValue && form["password"] === "" ? <p className="empty-text">A senha deve ser preenchida</p> : ""}
-                    {!validPassword && form["password"] !== "" ? <p className="empty-text">A senha deve conter no mínimo 8 caracteres, pelo menos um caractere especial, um caractere numérico e um caractere alfanumérico</p> : ""}
+                    {emptyValue && form["password"] === "" ? <p className="error-message">A senha deve ser preenchida</p> : ""}
+                    {!validPassword && form["password"] !== "" ? <p className="error-message">A senha deve conter no mínimo 8 caracteres, pelo menos um caractere especial, um caractere numérico, uma letra maiúscula e uma letra minúscula</p> : ""}
                 </div>
 
                 <div className="user-register-password-confirmation">
@@ -99,8 +101,8 @@ function UserSignupForm() {
                         onChange={(e) => handleChange(e)}
                     />
 
-                    {emptyValue && form["passwordConfirmation"] === "" ? <p className="empty-text">A confirmação de senha deve ser preenchida</p> : ""}
-                    {!confirmPassword && form["passwordConfirmation"] !== "" ? <p className="empty-text">A confirmação de senha deve ser preenchida</p> : ""}
+                    {emptyValue && form["passwordConfirmation"] === "" ? <p className="error-message">A confirmação de senha deve ser preenchida</p> : ""}
+                    {/* {!confirmPassword && form["passwordConfirmation"] !== "" ? <p className="empty-text">A confirmação de senha deve ser preenchida</p> : ""} */}
                 </div>
 
                 <button type="submit" className="submit-user-btn">Registrar</button>

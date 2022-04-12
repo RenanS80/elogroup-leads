@@ -1,25 +1,37 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
 import Navbar from './components/Navbar';
 import UserSignup from './pages/UserSignup';
 import LeadsPanel from './pages/LeadsPanel';
 import AddLead from './pages/AddLead';
-import { ToastContainer } from 'react-toastify';
+import { isAuthenticated } from './utils/auth'
+
+import './App.css';
+
+const PrivateRoute = ({ children, redirectTo }) => {
+  return isAuthenticated() ? children : <Navigate to={redirectTo} />
+}
+
 
 function App() {
   return (
-
     <>
       <ToastContainer />
-
 
       <BrowserRouter>
         <Navbar />
 
         <Routes>
-          <Route path="/" element={<UserSignup />} />
-          <Route path="/leads" element={<LeadsPanel />} />
-          <Route path="add-lead" element={<AddLead />} />
+          <Route path="/" exact element={<UserSignup />} />
+
+          <Route path="/leads" element={<PrivateRoute redirectTo="/">
+            <LeadsPanel />
+          </PrivateRoute>} />
+
+          <Route path="/add-lead" element={<PrivateRoute redirectTo="/">
+            <AddLead />
+          </PrivateRoute>} />
         </Routes>
 
       </BrowserRouter>
