@@ -16,6 +16,7 @@ thead {
     padding: 28px;
 }
 
+
 #leads-table tbody tr:nth-child(odd) {
     background-color: var(--gray-light);
 }

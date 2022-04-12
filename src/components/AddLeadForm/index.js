@@ -1,72 +1,85 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ArrowLeft from '../../assets/img/arrow-left.svg';
+import LocalStorageManager from '../../utils/LocalStorageManager';
 
 import './styles.css';
 
-const opportunityData = [
-    { name: "RPA" },
-    { name: "Produto Digital" },
-    { name: "Analytics" },
-    { name: "BPM" }
-];
 
 function AddLeadForm() {
 
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: '',
-        tel: '',
-        email: '',
-        opportunity: []
+        phone: '',
+        email: ''
     })
 
+    const [opportunityCheckbox, setOpportunityCheckbox] = useState({
+        "rpa": false,
+        "digitalProduct": false,
+        "analytics": false,
+        "bpm": false
+    });
+
+    // Hooks para validação de campos obrigatórios e email
     const [emptyValue, setEmptyValue] = useState(false);
+    const [emptyValueCheckbox, setEmptyValueCheckbox] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
-    const [opportunities, setOpportunities] = useState([]);
 
 
-    useEffect(() => {
-        setOpportunities(opportunityData);
-    }, []);
+    const handleCheck = (e) => { 
 
+        // Marca/desmarca os demais checkboxes se o checkboxe All estiver marcado/desmarcado
+        if (e.target.name === "all") { 
+            setOpportunityCheckbox({
+                "rpa": e.target.checked,
+                "digitalProduct": e.target.checked,
+                "analytics": e.target.checked,
+                "bpm": e.target.checked
+            });
+        } 
+        // Se o checkbox All estiver desmarcado, atualiza o state individual dos checkboxes que estiversm marcados
+        else { 
+            setOpportunityCheckbox({
+                ...opportunityCheckbox,
+                [e.target.name]: e.target.checked
+            });
+        }
+    }
 
     const handleChange = (e) => {
         let newProp = form;
         setValidEmail(true);
         newProp[e.target.name] = e.target.value;
         setForm({ ...newProp });
-
-        // Marcar e desmarcar todos os checkbox de oportunidades
-        const { name, checked } = e.target;
-
-        if (name === "all-selected") {
-            let tempOpp = opportunities.map(opp => { return { ...opp, isChecked: checked } })
-
-            setOpportunities(tempOpp);
-        }
-        else {
-            let tempOpp = opportunities.map(opp => opp.name === name ? { ...opp, isChecked: checked } : opp);
-
-            setOpportunities(tempOpp);
-        }
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
 
-        // Verificar se há campos não preenchidos (todos os campos devem ser obrigatórios)
+        // Verifica se há campos não preenchidos (todos os campos devem ser obrigatórios)
         let emptyValues = Object.values(form).some(obj => obj === "");
         setEmptyValue(emptyValues);
 
-        // Verificar se o email é válido
+        // Verifica se todos os checkboxes não estão preenchidos (valor false)
+        let emptyValueCheckbox = Object.values(opportunityCheckbox).every(obj => obj === false);
+        setEmptyValueCheckbox(emptyValueCheckbox)
+
+        // Verifica se o email é válido
         let validEmail = form["email"].toLowerCase().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
         setValidEmail(validEmail);
 
-        if(!emptyValues && validEmail){
-            e.currentTarget.submit();
-        }
+        // Condição para salvar o lead
+        if (!emptyValues &&!emptyValueCheckbox && validEmail) {
+            toast.success("Lead salvo com sucesso")
 
+            // Salva os dados do lead no LocalStorage e redireciona para a o painel de leads
+            LocalStorageManager.setLeads(form.name, form.phone, form.email, { ...opportunityCheckbox })
+            navigate("/leads");
+        }
     }
 
 
@@ -77,7 +90,6 @@ function AddLeadForm() {
                     <img src={ArrowLeft} alt="Voltar" />
                     <p>Voltar</p>
                 </div>
-
             </Link>
 
             <form onSubmit={(e) => handleSubmit(e)} id="lead-form">
@@ -89,6 +101,7 @@ function AddLeadForm() {
                             id="name"
                             name="name"
                             className="input-field"
+                            value={form.name}
                             onChange={(e) => handleChange(e)}
                         />
 
@@ -96,16 +109,17 @@ function AddLeadForm() {
                     </div>
 
                     <div className="lead-tel">
-                        <label htmlFor="tel">Telefone *</label>
+                        <label htmlFor="phone">Telefone *</label>
                         <input
                             type="number"
-                            id="tel"
-                            name="tel"
+                            id="phone"
+                            name="phone"
                             className="input-field"
+                            value={form.phone}
                             onChange={(e) => handleChange(e)}
                         />
 
-                        {emptyValue && form["tel"] === "" ? <p className="error-message">O telefone deve ser preenchido</p> : ""}
+                        {emptyValue && form["phone"] === "" ? <p className="error-message">O telefone deve ser preenchido</p> : ""}
                     </div>
 
                     <div className="lead-email">
@@ -115,6 +129,7 @@ function AddLeadForm() {
                             id="email"
                             name="email"
                             className="input-field"
+                            value={form.email}
                             onChange={(e) => handleChange(e)}
                         />
 
@@ -132,9 +147,10 @@ function AddLeadForm() {
                                     <th>
                                         <input
                                             type="checkbox"
-                                            name="all-selected"
-                                            checked={opportunities.filter(opp => opp?.isChecked !== true).length < 1}
-                                            onChange={(e) => handleChange(e)}
+                                            className="checkbox"
+                                            name="all"
+                                            checked={opportunityCheckbox.all}
+                                            onChange={(e) => handleCheck(e)}
                                         />
                                     </th>
                                     <th></th>
@@ -142,27 +158,60 @@ function AddLeadForm() {
                             </thead>
 
                             <tbody>
-
-                                {opportunities.map((opp, key) => (
-                                    <tr key={key}>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                name={opp.name}
-                                                checked={opp?.isChecked || false}
-                                                onChange={handleChange}
-                                            />
-                                        </td>
-                                        <td>
-                                            <label htmlFor={opp.name}>{opp.name}</label>
-                                        </td>
-                                    </tr>
-                                ))}
-
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            name="rpa"
+                                            checked={opportunityCheckbox.rpa}
+                                            onChange={(e) => handleCheck(e)}
+                                        />
+                                    </td>
+                                    <td>RPA</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            name="digitalProduct"
+                                            checked={opportunityCheckbox.digitalProduct}
+                                            onChange={(e) => handleCheck(e)}
+                                        />
+                                    </td>
+                                    <td>Produto Digital</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            name="analytics"
+                                            checked={opportunityCheckbox.analytics}
+                                            onChange={(e) => handleCheck(e)}
+                                        />
+                                    </td>
+                                    <td>Analytics</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            name="bpm"
+                                            checked={opportunityCheckbox.bpm}
+                                            onChange={(e) => handleCheck(e)}
+                                        />
+                                    </td>
+                                    <td>BPM</td>
+                                </tr>
                             </tbody>
                         </table>
-                    </div>
 
+                    </div>
+                    
+                    {emptyValueCheckbox ? <p className="error-message">Pelo menos uma opção deve ser selecionada</p> : ""}
                     <button type="submit" className="submit-lead-btn">Salvar</button>
                 </div>
             </form>

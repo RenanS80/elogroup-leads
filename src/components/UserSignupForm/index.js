@@ -13,23 +13,22 @@ import { useNavigate } from 'react-router-dom';
 
 function UserSignupForm() {
 
+    const navigate = useNavigate();
+
     const [form, setForm] = useState({
         user: "",
         password: "",
         passwordConfirmation: ""
     });
 
-    
+    // Hooks para validação de campos obrigatórios e password
     const [emptyValue, setEmptyValue] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    /* const [confirmPassword, setConfirmPassword] = useState(false); */
 
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         let newProp = form;
         setValidPassword(true);
-        /* setConfirmPassword(true); */
         newProp[e.target.name] = e.target.value;
 
         setForm({ ...newProp });
@@ -38,17 +37,19 @@ function UserSignupForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Verificar se há campos não preenchidos (todos os campos devem ser obrigatórios)
+        // Verifica se há campos não preenchidos (todos os campos devem ser obrigatórios)
         let emptyValues = Object.values(form).some(obj => obj === "");
         setEmptyValue(emptyValues);
 
-        // Verificar se a senha é valida
+        // Verifica se a senha é valida
         let validPassword = form["password"].match(/(?=^.{8,}$)((?=.*\d)(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)
         setValidPassword(validPassword);
 
-        // Envia o formulário se atender as regras de validação
-        if (!emptyValues && validPassword) {
+        // Condição para registrar o usuário e 
+        if (!emptyValues && validPassword && form.passwordConfirmation === form.password) {
             toast.success('Cadastro realizado com sucesso');
+
+            // Salva os dados do usuário no LocalStorage e redireciona para a o painel de leads
             localStorage.setItem("user", form.user);
             navigate("/leads");
         }
@@ -102,7 +103,7 @@ function UserSignupForm() {
                     />
 
                     {emptyValue && form["passwordConfirmation"] === "" ? <p className="error-message">A confirmação de senha deve ser preenchida</p> : ""}
-                    {/* {!confirmPassword && form["passwordConfirmation"] !== "" ? <p className="empty-text">A confirmação de senha deve ser preenchida</p> : ""} */}
+                    {form.passwordConfirmation !== form.password && form["passwordConfirmation"] !== "" ? <p className="error-message">A confirmação de senha está incorreta</p> : ""}
                 </div>
 
                 <button type="submit" className="submit-user-btn">Registrar</button>
