@@ -13,7 +13,7 @@ class LocalStorageManager {
 
     // Registra o usuário no local storage
     static setUser(user) {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", user);
     }
 
     // Retorna todos os leads no localStorage
@@ -47,6 +47,7 @@ class LocalStorageManager {
         let leads;
 
 
+        // eslint-disable-next-line no-cond-assign
         if (leads = this.getData("leads")) {
             if (leads[key].status === 1) {       // Cliente em Potencial
                 leads[key].status = 2;
